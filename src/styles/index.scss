@@ -1,5 +1,26 @@
 @import "~bootstrap/scss/bootstrap.scss";
 
+body{
+    background-color: rgb(41, 41, 41);
+}
+// .mostrarBtn{
+//     height: 75px;
+// }
+.a{
+    display: none;
+    transition-duration: 0.5s;
+    padding: 0px 2px 0px 2px;
+    background-color: transparent;
+    border: none;
+    color: red;
+}
+
+.mostrarBtn:hover .a{
+    display: block;
+    padding: 2px;
+}
+
+
 /* 
 
     You can write your own styles here...
