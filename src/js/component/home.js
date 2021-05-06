@@ -4,6 +4,16 @@ export function Home() {
 	const style = {
 		borderBottom: "1px solid green"
 	};
+	const obtenerTraerListas = async () => {
+		try {
+			const res = await fetch("url");
+			const data = await res.json;
+			console.log(data);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	const styleItems = {
 		borderBottom: "1px solid green"
 		// borderTop: "1px solid green"
