@@ -1,33 +1,55 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-dom";
+
 export function Home() {
-	const style = {
-		borderBottom: "1px solid green"
-	};
-	const obtenerTraerListas = async () => {
+	// const [lista, setLista] = useState([{ label: "", done: false }]);
+	const [name, setName] = useState("");
+	const [arr, setArr] = useState([]);
+	const [cambiar, setCambiar] = useState(false);
+	const [agregar, setAgregar] = useState(false);
+	const [lista, setLista] = useState([]);
+
+	const llamar = async () => {
 		try {
-			const res = await fetch("url");
-			const data = await res.json;
-			console.log(data);
+			const res = await fetch(
+				"https://assets.breatheco.de/apis/fake/todos/user/lmarrero"
+			);
+			const data = await res.json();
+			console.log("GET: " + data);
+			setLista(data);
+			console.log("GET lista: ", lista);
 		} catch (error) {
 			console.log(error);
 		}
 	};
-
-	const styleItems = {
-		borderBottom: "1px solid green"
-		// borderTop: "1px solid green"
+	const enviar = async () => {
+		try {
+			const res = await fetch(
+				"https://assets.breatheco.de/apis/fake/todos/user/lmarrero",
+				{
+					method: "PUT",
+					body: JSON.stringify(arr),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				}
+			);
+			const data = await res.json();
+			console.log("PUT: ", data);
+			setAgregar(true);
+		} catch (error) {
+			console.log("Error: ", error);
+		}
 	};
-	const [name, setName] = useState("");
-	const [arr, setArr] = useState([]);
-	const [cambiar, setCambiar] = useState(false);
 
 	const agregarTarea = e => {
 		e.preventDefault();
+		console.log("LISTAAA:  " + lista.label);
 		let aux = arr;
-		aux.push(name);
+		let obj = { label: name, done: false };
+		aux.push(obj);
 		setArr(aux);
 		setName("");
+		enviar();
 	};
 
 	const eliminarName = index => {
@@ -48,6 +70,17 @@ export function Home() {
 		}
 	});
 
+	useEffect(() => {
+		llamar();
+	}, []);
+
+	useEffect(() => {
+		if (agregar) {
+			llamar();
+		}
+		setAgregar(false);
+	});
+
 	return (
 		<div className="text-center mt-5">
 			<h1 className="text-secondary">Todo List</h1>
@@ -64,13 +97,13 @@ export function Home() {
 			<div className="d-flex flex-column align-items-center">
 				<div className="rounded bg-dark col-5">
 					<div className="text-warning  ">
-						{arr.map((elem, index) => {
+						{lista.map((elem, index) => {
 							return (
 								<div
 									key={index}
 									className="d-flex justify-content-between mostrarBtn"
-									style={style}>
-									<h4 className="p-1">{elem}</h4>
+									style={{ borderBottom: "1px solid green" }}>
+									<h4 className="p-1">{elem.label}</h4>
 									<div>
 										<button
 											className={"btn a btn-primary m-2 "}
@@ -83,7 +116,7 @@ export function Home() {
 						})}
 					</div>
 					<div
-						style={styleItems}
+						style={{ borderBottom: "1px solid green" }}
 						className="bg-dark rounded d-flex justify-content-start text-secondary">
 						<h6>{arr.length} Items</h6>
 					</div>
