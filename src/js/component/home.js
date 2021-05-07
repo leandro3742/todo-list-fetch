@@ -6,7 +6,6 @@ export function Home() {
 	const [arr, setArr] = useState([]);
 	const [cambiar, setCambiar] = useState(false);
 	const [agregar, setAgregar] = useState(false);
-	const [lista, setLista] = useState([]);
 
 	const llamar = async () => {
 		try {
@@ -14,9 +13,7 @@ export function Home() {
 				"https://assets.breatheco.de/apis/fake/todos/user/lmarrero"
 			);
 			const data = await res.json();
-			console.log("GET: " + data);
-			setLista(data);
-			console.log("GET lista: ", lista);
+			setArr(data);
 		} catch (error) {
 			console.log(error);
 		}
@@ -43,10 +40,10 @@ export function Home() {
 
 	const agregarTarea = e => {
 		e.preventDefault();
-		console.log("LISTAAA:  " + lista.label);
 		let aux = arr;
 		let obj = { label: name, done: false };
 		aux.push(obj);
+
 		setArr(aux);
 		setName("");
 		enviar();
@@ -60,15 +57,17 @@ export function Home() {
 		}
 		aux.length = index;
 		setArr(aux);
+		enviar();
 		setCambiar(true);
 	};
 
-	useEffect(() => {
-		if (cambiar === true) {
-			setArr(arr);
-			setCambiar(false);
-		}
-	});
+	// useEffect(() => {
+	// if (cambiar === true) {
+	// setArr(arr);
+
+	// setCambiar(false);
+	// }
+	// });
 
 	useEffect(() => {
 		llamar();
@@ -97,7 +96,7 @@ export function Home() {
 			<div className="d-flex flex-column align-items-center">
 				<div className="rounded bg-dark col-5">
 					<div className="text-warning  ">
-						{lista.map((elem, index) => {
+						{arr.map((elem, index) => {
 							return (
 								<div
 									key={index}
